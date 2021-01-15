@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:progo/views/signup.dart';
 
 class login extends StatefulWidget {
   @override
@@ -6,15 +7,21 @@ class login extends StatefulWidget {
 }
 
 class _loginPageState extends State<login> {
+
   @override
   Widget build(BuildContext context) {
+    bool _pressed1=false;
+    bool _pressed2=false;
+    bool _pressed3=false;
     return new Scaffold(
         resizeToAvoidBottomPadding: false,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
+              padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
               child: Stack(
+
                 children: <Widget>[
                   Container(
                     padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
@@ -40,12 +47,12 @@ class _loginPageState extends State<login> {
               ),
             ),
             Container(
-                padding: EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
+                padding: EdgeInsets.only(top: 35.0, left: 40.0, right: 40.0),
                 child: Column(
                   children: <Widget>[
                     TextField(
                       decoration: InputDecoration(
-                          labelText: 'EMAIL',
+                          labelText: 'EMAIL / USERNAME',
                           labelStyle: TextStyle(
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.bold,
@@ -65,31 +72,20 @@ class _loginPageState extends State<login> {
                               borderSide: BorderSide(color: Colors.green))),
                       obscureText: true,
                     ),
-                    SizedBox(height: 5.0),
-                    Container(
-                      alignment: Alignment(1.0, 0.0),
-                      padding: EdgeInsets.only(top: 15.0, left: 20.0),
-                      child: InkWell(
-                        child: Text(
-                          'Forgot Password',
-                          style: TextStyle(
-                              color: Colors.green,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Montserrat',
-                              decoration: TextDecoration.underline),
-                        ),
-                      ),
-                    ),
+                    SizedBox(height:5.0),
+
                     SizedBox(height: 40.0),
                     Container(
-                      height: 40.0,
+                      height: 40.0,width: 220,
                       child: Material(
                         borderRadius: BorderRadius.circular(20.0),
                         shadowColor: Colors.greenAccent,
                         color: Colors.green,
                         elevation: 7.0,
-                        child: GestureDetector(
-                          onTap: () {},
+                        child: InkWell(
+                          onTap: () {
+
+                          },
                           child: Center(
                             child: Text(
                               'LOGIN',
@@ -104,34 +100,39 @@ class _loginPageState extends State<login> {
                     ),
                     SizedBox(height: 20.0),
                     Container(
-                      height: 40.0,
+                      height: 40.0,width: 220,
                       color: Colors.transparent,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Colors.black,
-                                style: BorderStyle.solid,
-                                width: 1.0),
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(20.0)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Center(
-                              child:
-                              ImageIcon(AssetImage('assets/google.png')),
-                            ),
-                            SizedBox(width: 10.0),
-                            Center(
-                              child: Text('Log in with facebook',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Montserrat')),
-                            )
-                          ],
+
+                      child:InkWell(
+                        onTap:(){},
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Colors.black,
+                                  style: BorderStyle.solid,
+                                  width: 1.0),
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(20.0)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Center(
+                                child:
+                                ImageIcon(AssetImage('assets/google-logo.png'),size: 40,),
+                              ),
+                              SizedBox(width: 10.0),
+                              Center(
+                                child: Text('Log in with Google',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Montserrat')),
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    )
+                    ),
+
                   ],
                 )),
             SizedBox(height: 15.0),
@@ -145,7 +146,10 @@ class _loginPageState extends State<login> {
                 SizedBox(width: 5.0),
                 InkWell(
                   onTap: () {
-                    Navigator.of(context).pushNamed('/signup');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => signup()),
+                    );
                   },
                   child: Text(
                     'Register',
