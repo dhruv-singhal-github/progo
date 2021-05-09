@@ -1,6 +1,15 @@
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
+import 'package:progo/views/HelperFunctions.dart';
+import 'package:progo/views/projectManagerScreen.dart';
 import 'package:progo/views/signup.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:universal_widget/universal_widget.dart';
+final fauth=FirebaseAuth.instance;
+bool iisLoading=false;
+final _scaffoldKey = GlobalKey<ScaffoldState>();
+final snackBar1 = SnackBar(content: Text('Email or Password not valid!'));
+final snackBar2 = SnackBar(content: Text('Verify Email (check inbox)'));
 class login extends StatefulWidget {
   @override
   _loginPageState createState() => new _loginPageState();
@@ -8,12 +17,30 @@ class login extends StatefulWidget {
 
 class _loginPageState extends State<login> {
 
+  final TextEditingController email=new TextEditingController();
+
+  final TextEditingController pwd=new TextEditingController();
+
+
   @override
+  void initState() {
+    String id;
+    HelperFunctions.getUserNameSharedPreference().then((value)=>{id=value});
+    HelperFunctions.getUserLoggedInSharedPreference().then((value) => {
+      if(value){
+
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (BuildContext context) =>
+            projectManagerScreen(id)))
+      }
+
+    });
+  }
+
   Widget build(BuildContext context) {
-    bool _pressed1=false;
-    bool _pressed2=false;
-    bool _pressed3=false;
+
     return new Scaffold(
+    key:_scaffoldKey,
         resizeToAvoidBottomPadding: false,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,6 +78,7 @@ class _loginPageState extends State<login> {
                 child: Column(
                   children: <Widget>[
                     TextField(
+                      controller:email,
                       decoration: InputDecoration(
                           labelText: 'EMAIL / USERNAME',
                           labelStyle: TextStyle(
@@ -62,6 +90,7 @@ class _loginPageState extends State<login> {
                     ),
                     SizedBox(height: 20.0),
                     TextField(
+                      controller:pwd,
                       decoration: InputDecoration(
                           labelText: 'PASSWORD',
                           labelStyle: TextStyle(
@@ -85,7 +114,12 @@ class _loginPageState extends State<login> {
                         child: InkWell(
                           onTap: () {
 
-                          },
+                        SignIn(email.text.toString(), pwd.text.toString(),context,_scaffoldKey);
+
+
+     },
+
+
                           child: Center(
                             child: Text(
                               'LOGIN',
@@ -99,39 +133,7 @@ class _loginPageState extends State<login> {
                       ),
                     ),
                     SizedBox(height: 20.0),
-                    Container(
-                      height: 40.0,width: 220,
-                      color: Colors.transparent,
 
-                      child:InkWell(
-                        onTap:(){},
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.black,
-                                  style: BorderStyle.solid,
-                                  width: 1.0),
-                              color: Colors.transparent,
-                              borderRadius: BorderRadius.circular(20.0)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Center(
-                                child:
-                                ImageIcon(AssetImage('assets/google-logo.png'),size: 40,),
-                              ),
-                              SizedBox(width: 10.0),
-                              Center(
-                                child: Text('Log in with Google',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Montserrat')),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
 
                   ],
                 )),
@@ -159,10 +161,65 @@ class _loginPageState extends State<login> {
                         fontWeight: FontWeight.bold,
                         decoration: TextDecoration.underline),
                   ),
-                )
+                ),
+
               ],
+            ),
+            SizedBox(height: 20,),
+            Center(
+                child:
+              UniversalWidget(
+                name: "loading",
+                child: CircularProgressIndicator(),visible: false,
+
+              )
             )
           ],
         ));
   }
+  Future<void> SignIn(String email, String password,BuildContext context,GlobalKey _scaffoldkey) async{
+
+
+      UniversalWidget.find("loading").update(visible:true);
+
+    FirebaseUser user=null;
+    AuthResult authr=await fauth.signInWithEmailAndPassword(email:email,password: password).then((value) async {
+      user= await FirebaseAuth.instance.currentUser();
+      if( user.isEmailVerified) {
+        HelperFunctions.saveUserLoggedInSharedPreference(true);
+        HelperFunctions.saveUserNameSharedPreference(user.uid.toString());
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (BuildContext context) =>
+            projectManagerScreen(user.uid.toString())));
+      }
+      else {
+      sendmail();
+       UniversalWidget.find("loading").update(visible:false);
+
+        _scaffoldKey.currentState.showSnackBar(snackBar2);
+
+      }
+    }).catchError((onError)=>{
+
+      _scaffoldKey.currentState.showSnackBar(snackBar1), UniversalWidget.find("loading").update(visible:false)
+    }
+      );
+
+
+    final userid = user.uid;
+    print(userid);
+
+
+
+  }
+  Future<void> sendmail() async{
+
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+    if (!user.isEmailVerified) {
+      user.sendEmailVerification();
+
+    }
+  }
+
 }

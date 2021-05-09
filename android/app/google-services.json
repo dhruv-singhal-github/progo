@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "117463724478",
+    "project_id": "progo-drusn",
+    "storage_bucket": "progo-drusn.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:117463724478:android:3d68dec01226c751b989ef",
+        "android_client_info": {
+          "package_name": "com.example.progo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "117463724478-jli4nteud6qkcvubf5gnb4j2jjbdp426.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.progo",
+            "certificate_hash": "0f07c303013138eec78aff5d7824eb3187a0c0f2"
+          }
+        },
+        {
+          "client_id": "117463724478-cptvbghc5n4fgppdkm3l2ac3fhai24ls.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCO2R4dITWRPweOoFuo4hOoWhHFv6vw39Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "117463724478-cptvbghc5n4fgppdkm3l2ac3fhai24ls.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
